@@ -102,3 +102,11 @@ exports.updatePasswordSchema = [
         .custom((value, { req }) => value === req.body.password)
         .withMessage('Password and confirm password does not match')
 ];
+
+exports.userIdParamSchema = [
+    check('userId')
+        .not().isEmpty()
+        .withMessage('User ID is required')
+        .isInt({ min: 1 })
+        .withMessage('User ID must be a valid positive integer')
+];

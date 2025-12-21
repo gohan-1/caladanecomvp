@@ -293,6 +293,10 @@ class UserModel {
   async userBUSDDepositCheck() {
     return mockData.getPendingDeposits();
   }
+
+  async getUserStatistics(userId) {
+    return mockData.getUserStatistics(userId);
+  }
 }
 
 module.exports = new UserModel();

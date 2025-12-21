@@ -464,6 +464,46 @@ class MockDataService {
     }];
   }
 
+  getUserStatistics(userId) {
+    const userIdInt = parseInt(userId);
+    
+    // Check if user exists
+    const user = this.users.get(userIdInt);
+    if (!user) {
+      return null;
+    }
+
+    // Calculate total transactions count
+    let totalTransactions = 0;
+    for (const transaction of this.transactions.values()) {
+      if (transaction.user_id === userIdInt) {
+        totalTransactions++;
+      }
+    }
+
+    // Calculate total staking (sum of busd_amount from all staking records)
+    let totalStaking = 0;
+    for (const staking of this.staking.values()) {
+      if (staking.user_id === userIdInt) {
+        totalStaking += parseFloat(staking.busd_amount || 0);
+      }
+    }
+
+    // Calculate total rewards (sum of reward_token from all staking earnings)
+    let totalRewards = 0;
+    for (const earning of this.stakingEarnings.values()) {
+      if (earning.user_id === userIdInt) {
+        totalRewards += parseFloat(earning.reward_token || 0);
+      }
+    }
+
+    return {
+      total_transactions: totalTransactions,
+      total_staking: totalStaking,
+      total_rewards: totalRewards,
+    };
+  }
+
   // Staking earnings
   createStakingEarning(data) {
     const id = this.counters.stakingEarnings++;
